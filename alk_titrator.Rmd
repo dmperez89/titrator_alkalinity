@@ -1,0 +1,32 @@
+---
+title: "titrator_output"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r load libraries}
+library(fs)
+library(here)
+library(tidyverse)
+library(readxl)
+
+#Set working directory
+alk_raw <- here("data_raw") %>%
+  dir_ls() %>%
+  map_dfr(read_tsv, skip = 20) %>%
+  {.}
+
+```
+
+
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
