@@ -12,15 +12,33 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load libraries}
 library(fs)
 library(here)
-library(tidyverse)
+library(dplyr)
+library(metacsv)
 library(readxl)
+library(tidyverse)
 
-#Set working directory
+#Read in one raw alkalinity file to create a metadata template
+alk_meta_temp <- read_tsv(here("data_raw", "20190727 CRM 181 0014 A.alk" ))
+#Write out blank meta data template
+write_meta_template(alk_meta_temp, here("output","alk_titrator"))
+
+#Read in all the alkalinity files into one data frame, skipping the first 20 rows of metadata
 alk_raw <- here("data_raw") %>%
   dir_ls() %>%
   map_dfr(read_tsv, skip = 20) %>%
   {.}
 
+#Pull the metadata (the first 20 rows we pulled out before)
+alk_meta <- here("data_raw") %>%
+  dir_ls() %>%
+  map_dfr(read_tsv,col_names = FALSE, n_max = 20) %>%
+  {.}
+
+#I did it with excel too, but we don't really need to, I guess!
+# alk_meta_excel <- here("data") %>%
+#   dir_ls() %>%
+#   map_dfr(read_xlsx, sheet = 1, col_names = FALSE, n_max = 20) %>%
+#   {.}
 ```
 
 
